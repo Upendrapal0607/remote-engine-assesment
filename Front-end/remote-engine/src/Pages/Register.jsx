@@ -5,9 +5,9 @@ import { RgisterRequest } from '../Redux/UserReducer/Type';
 import { useNavigate } from 'react-router-dom';
 
 export const Register = () => {
-    const [name,setName] = useState("upendra")
-    const [email, setEmail] = useState('pal@gmail.com');
-    const [password, setPassword] = useState('123');
+    const [name,setName] = useState("")
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [role, setRole] = useState('developer');
     const dispatch = useDispatch()
     const navigate = useNavigate()

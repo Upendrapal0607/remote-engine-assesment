@@ -1,60 +1,46 @@
-const {Router} = require("express");
+// important import
+const { Router } = require("express");
 const bcrypt = require("bcrypt");
 const { DeveloperModel } = require("../models/developer.model");
-const DeveloperRoute = Router()
+const DeveloperRoute = Router();
 
-DeveloperRoute.get("/",async(req,res)=>{
+// All developer get end point "/"
 
-})
-DeveloperRoute.post("/register",async(req,res)=>{
-   const resUser= req.body
-  
-   try {
-    const AlraidyExitstDeveloper= await DeveloperModel.findOne({email:resUser.email})
-    if(AlraidyExitstDeveloper){
-        res.status(200).json({message:`user whose email ${resUser.email} is alraiday resistered`})
+DeveloperRoute.get("/", async (req, res) => {
+  try {
+    let allDeveloperData = await DeveloperModel.find();
+    res.status(201).json({ allDeveloperData });
+  } catch (error) {
+    res.status(404).json({ message: error });
+  }
+});
+
+// new developer apply end point "/add"
+
+DeveloperRoute.post("/add", async (req, res) => {
+  const resUser = req.body;
+  console.log({ resUser });
+  try {
+    const AlraidyExitstDeveloper = await DeveloperModel.findOne({
+      email: resUser.email,
+    });
+    if (AlraidyExitstDeveloper) {
+      res.status(200).json({
+        message: `user whose email ${resUser.email} is alraiday resistered`,
+      });
+    } else {
+      console.log("hello");
+      const developerData = new DeveloperModel(resUser);
+      await developerData.save();
+      res.status(200).send({
+        message: `your details has been accepted we will get back to you soon`,
+      });
     }
-    else{
-    bcrypt.hash(resUser.password,5,async(err,hash)=>{
-        if(err) res.status(404).send({message:err})
-        const registerUser=new DeveloperModel({...resUser,password:hash})
-        await registerUser.save()
-        res.status(200).send({message:`Your Registation successful`})
+  } catch (error) {
+    res.status(200).json({ message: "error" });
+  }
+});
 
-    })
-  }   
-    } catch (error) {
-        res.status(200).json({message:error})
-    }
-
-})
-
-// userRoute.post("/login",async(req,res)=>{
-//     const { email, password } = req.body;
-//     try {
-//       const user = await DeveloperModel.findOne({ email});
-//       if (user) {
-//         bcrypt.compare(password, user.password, (err, result) => {
-//           if (result) {
-//             const token = jwt.sign(
-//               { userID: user._id, user: user.name },
-//               "masai",
-//             );
-//             // console.log({token});
-//             res.status(200).send({ message:"login successful",token,user,login_role:"user"});
-//           } else {
-//             res.status(200).send({ message: "wrong password or email" });
-//           }
-//         });
-//       } else {
-//         res.status(200).send({ message: "please provid email and password" });
-//       }
-//     } catch (error) {
-//       res.status(200).send({ message: error });
-//     }
-// })
-
-
-module.exports={
-    DeveloperRoute
-}
+module.exports = {
+  DeveloperRoute,
+};

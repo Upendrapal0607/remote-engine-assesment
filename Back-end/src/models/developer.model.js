@@ -1,55 +1,65 @@
 const mongoose = require("mongoose");
-const SkillsSchema = mongoose.Schema({
-  name: String,
-});
 
+// skills schema 
+const SkillsSchema = mongoose.Schema(
+  {
+    name: String,
+  },
+  { versionKey: false }
+);
+
+// skills model 
 const SkillsModel = mongoose.model("skills", SkillsSchema);
 
+// developer(onboadring) schema with all required field
 
-const DeveloperSchema = mongoose.Schema({
-  First_Name: {
-    type: String,
-    required: true,
-  },
-  LastName: {
-    type: String,
-    required: true,
-  },
-  Phone_Number: {
-    type: String,
-    required: true,
-  },
-  Email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  skills: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "skills"
-  }],
-  Professional_Experience: [
-    {
-      Company_Name: { type: String, required: true },
-      Tech_Stack: { type: [String], default: [] },
-      Skills_Used: { type: String },
-      Time_Period: { type: String, default: "", required: true },
+const DeveloperSchema = mongoose.Schema(
+  {
+    first_name: {
+      type: String,
+      required: true,
     },
-  ],
-  Educational_Experience: [
-    {
-      Degree_Name: { type: String, required: true },
-      School_Name: { type: String, required: true },
-      Time_Period: {
-        start_date: String,
-        end_date: String,
+    last_name: {
+      type: String,
+      required: true,
+    },
+    phone_number: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    skills: [
+      {
+        type: [String],
       },
-    },
-  ],
-});
+    ],
+    professional_experience: [
+      {
+        company_name: { type: String, required: true },
+        tech_stack: String,
+        skills_used: [String],
+        time_period: { type: Number, default: 0, required: true },
+      },
+    ],
+    educational_experience: [
+      {
+        degree_name: { type: String, required: true },
+        school_name: { type: String, required: true },
+        time_period: { type: Number, default: 0, required: true },
+      },
+    ],
+  },
+  { versionKey: false }
+);
+
+// deeloper (Onboarding) model 
 
 const DeveloperModel = mongoose.model("/DeveloperData", DeveloperSchema);
 module.exports = {
   SkillsModel,
-  DeveloperModel
+  DeveloperModel,
 };

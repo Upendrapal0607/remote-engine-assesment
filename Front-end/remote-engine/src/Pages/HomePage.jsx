@@ -1,7 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components'
+import { GetAllDeveloper } from '../Redux/OnboardingReducer/Type';
 
 export const HomePage = () => {
+  const state = useSelector((state) => state.OnboardingReducer);
+  const dispatch = useDispatch()
+console.log({state});
+  
+  useEffect(() => {
+    dispatch(GetAllDeveloper()).then((res) => {
+       console.log({ developer: res });
+     });
+   }, []);
+ 
   return (
     <DIV>
     <div className="home-content">
