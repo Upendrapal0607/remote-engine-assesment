@@ -10,6 +10,8 @@ Till now it is not deployed any where. You can check this project using bellow f
 
 ## Video Walkthrough of the project
 
+- Vedio link:- https://drive.google.com/file/d/1dZenvBgY90D1l0mS2nvcH9WYo_BxSuBG/view?usp=sharing
+
 ## Features
 
 List out the key features of your application.
