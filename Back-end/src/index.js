@@ -2,7 +2,6 @@
 const express = require("express");
 const { connection } = require("./db/db");
 const cors = require("cors");
-const { ClintRoute } = require("./routes/Clint.route");
 const { DeveloperRoute } = require("./routes/Developer.route");
 const { RegisterRout } = require("./routes/Register.Route");
 const { SkillsRoute } = require("./routes/Skiils.Route");
@@ -13,8 +12,6 @@ const port = process.env.PORT || 8080;
 const app = express();
 app.use(express.json());
 app.use(cors());
-
-app.use("/clint", ClintRoute);
 app.use("/developer", DeveloperRoute);
 app.use("/user", RegisterRout);
 app.use("/skills", SkillsRoute);

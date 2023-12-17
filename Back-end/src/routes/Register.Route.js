@@ -21,7 +21,6 @@ RegisterRout.get("/", async (req, res) => {
 
 RegisterRout.post("/register", async (req, res) => {
   const resUser = req.body;
-
   try {
     const AlraidyExitstUser = await Register_model.findOne({
       email: resUser.email,
