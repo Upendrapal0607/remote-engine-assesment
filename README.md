@@ -5,8 +5,9 @@
 This dynamic job portal serves as the job hub where clients seamlessly post job openings for developer, enabling developers to effortlessly showcase their releted skill sets, and get application accepted for next proceess, and facilitating seamless communication between developers and companies for the realization of their dream careers.
 
 ## Deplolyed App
+- Frontend:- [Deploy Link](https://657f34e2ff0bc2168eaada50--roaring-paletas-b3e32e.netlify.app/)
+- Backend:-  [Deploy Link](https://comfortable-bat-leg-warmers.cyclic.app/)
 
-Till now it is not deployed any where. You can check this project using bellow few step and instruction
 
 ## Video Walkthrough of the project
 
@@ -63,7 +64,7 @@ to run your backend localy and see all changes
 Multiple API endpoints, methods, brief descriptions, and examples of request/response.
 
 GET /api/user - retrieve all the developer and client registred user list
-POST /api/developer/add - register new user both for client and developer as well
+POST /api/user/add - register new user both for client and developer as well
 GET /api/developer - retrieve all the onboarded developer list
 POST /api/developer/add - add new developer in developer list
 
