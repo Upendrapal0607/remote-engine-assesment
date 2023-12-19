@@ -37,6 +37,7 @@ DeveloperRoute.post("/add", async (req, res) => {
       });
     }
   } catch (error) {
+    console.log("error");
     res.status(200).json({ message: "error" });
   }
 });

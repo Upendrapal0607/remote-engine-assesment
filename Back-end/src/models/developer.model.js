@@ -34,14 +34,14 @@ const DeveloperSchema = mongoose.Schema(
     },
     skills: [
       {
-        type: [String],
+        type: [mongoose.Schema.Types.ObjectId],
       },
     ],
     professional_experience: [
       {
         company_name: { type: String, required: true },
         tech_stack: String,
-        skills_used: [String],
+        skills_used: [mongoose.Schema.Types.ObjectId],
         time_period: { type: Number, default: 0, required: true },
       },
     ],

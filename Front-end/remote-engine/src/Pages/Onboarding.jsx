@@ -5,6 +5,9 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { AddDeveloper, GetAllDeveloper } from "../Redux/OnboardingReducer/Type";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { skills_api } from "../Service/api";
+import { getALLSkills } from "../Redux/SkillsReducer/Action";
 
 //  initial developer state position
 const IntireDeveloperData = {
@@ -23,12 +26,21 @@ export const Onboarding = () => {
   // useful variables and states
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [skillsData, setSkillsData] = useState([
-    "React js",
-    "MERN",
-    "JavaScript",
-    "mongo DB",
-  ]);
+  const skillsData = useSelector(store=>store.skillsReducer.skills)
+  const allSkillsObj = useSelector(store=>store.skillsReducer)
+// console.log({allSkillsObj});
+  useEffect(()=>{
+   axios.get(skills_api).then(res=>{
+    console.log({res});
+    dispatch(getALLSkills()).then(res=>{
+      console.log({skissData:res});
+    })
+   })
+  },[])
+  
+  let [sowSkills,setSowSkills] = useState([])
+  let [sowProfessionalSkills,setSowProfessionSkills] = useState([])
+
   const [developerData, setDeveloperData] = useState(IntireDeveloperData);
   const [basicDetails, setBasicDetails] = useState({
     first_name: "",
@@ -38,6 +50,7 @@ export const Onboarding = () => {
     skills: [],
   });
 
+// console.log({basicDetails});
   const [professionalExperience, setProfessionalExperience] = useState({
     company_name: "",
     tech_stack: "",
@@ -52,26 +65,20 @@ export const Onboarding = () => {
   });
 
   const [newSkill, setNewSkill] = useState("");
-  const [useSkill, setuseSkill] = useState("");
+
   const [checkSkill, setCheckSkill] = useState(false);
 
-  // default skills fetch from the backend using useEffect
-
-  // useEffect( () => {
-  //  dispatch(GetAllDeveloper()).then((res) => {
-  //     console.log({ developer: res });
-  //   });
-  // }, []);
 
   //  add more skills function  in skills array
 
-  const handleClick = (e, index) => {
-    const { value } = e.target;
-    setBasicDetails((prev) => ({ ...prev, skills: [...prev.skills, value] }));
-    let CopySkills = [...skillsData];
+  const handleClick = (e, index,el) => {
+   if(basicDetails?.skills.includes(el._id)){
+     alert("this is already added")
+   }else{
+     setBasicDetails((prev) => ({ ...prev, skills: [...prev.skills, el._id] }));
+     setSowSkills(prev=>[...prev,el])
 
-    CopySkills.splice(index, 1);
-    setSkillsData(CopySkills);
+   }
   };
 
   // add skills in basic details state
@@ -79,7 +86,7 @@ export const Onboarding = () => {
   const handlAddClick = () => {
     if (checkSkill) {
       if (newSkill) {
-        setSkillsData((prev) => [...prev, newSkill]);
+       
         setNewSkill("");
         setCheckSkill(!checkSkill);
       }
@@ -90,16 +97,15 @@ export const Onboarding = () => {
 
   // this fuction use for adding used skills in company
 
-  const handleAddUse = () => {
-    if (useSkill) {
+  const handleAddusedSkills = (index,el) => {
+    if(professionalExperience?.skills_used.includes(el._id)){
+      alert("this is already added")
+    }else{
       setProfessionalExperience((prev) => ({
         ...prev,
-        skills_used: [...prev.skills_used, useSkill],
+        skills_used: [...prev.skills_used, el._id],
       }));
-      alert(`your ${useSkill} added into queue you can add anather skills`);
-      setuseSkill("");
-    } else {
-      alert("please fill your used skills");
+      setSowProfessionSkills([...sowProfessionalSkills,el])
     }
   };
 
@@ -116,6 +122,7 @@ export const Onboarding = () => {
           professionalExperience,
         ],
       }));
+
       setProfessionalExperience({
         company_name: "",
         time_period: 0,
@@ -156,7 +163,7 @@ export const Onboarding = () => {
       phone_number: basicDetails.phone_number,
       skills: basicDetails.skills,
     };
-    console.log(postDeveloperData);
+    console.log({postDeveloperData});
     dispatch(AddDeveloper(postDeveloperData)).then((res) => {
       if (
         res.message ==
@@ -165,7 +172,8 @@ export const Onboarding = () => {
         alert(res.message);
         setDeveloperData(IntireDeveloperData);
         navigate("/");
-      } else if (
+      } 
+      else if (
         res.message ==
         `user whose email ${postDeveloperData.email} is alraiday resistered`
       ) {
@@ -173,6 +181,23 @@ export const Onboarding = () => {
       }
     });
   };
+
+  const handleSowSkills=(index)=>{
+    let temparray = [...sowSkills]
+    let tempIdArr = [...basicDetails?.skills]
+    temparray.splice(1,index);
+    tempIdArr.splice(1,index);
+    setSowSkills(temparray)
+    setBasicDetails(prev=>({...prev,skills:tempIdArr}))
+  }
+  const deleteProfesionalSkills=(index)=>{
+    let tempProfessionalSkills = [...sowProfessionalSkills]
+    let tempIdprofessionalSkillls = [...professionalExperience?.skills_used]
+    tempProfessionalSkills.splice(1,index);
+    tempIdprofessionalSkillls.splice(1,index);
+    setSowProfessionSkills(tempProfessionalSkills)
+    setProfessionalExperience(prev=>({...prev,skills_used:tempIdprofessionalSkillls}))
+  }
 
   return (
     <DIV>
@@ -249,10 +274,10 @@ export const Onboarding = () => {
             {skillsData?.map((el, index) => (
               <button
                 key={index}
-                value={el}
-                onClick={(e) => handleClick(e, index)}
+                value={el.name}
+                onClick={(e) => handleClick(e, index,el)}
               >
-                {el}
+                {el.name}
               </button>
             ))}
           </div>
@@ -270,7 +295,19 @@ export const Onboarding = () => {
               ADD
             </button>
           </div>
-
+          <h1>your added skills sow below</h1>
+          <div className="skills-main">
+            {sowSkills?.map((el,index) => (
+              <button
+              onClick={()=>handleSowSkills(index)}
+              >
+                {el.name}
+              </button>
+            ))}
+          </div>
+ <   div>
+ 
+ </div>
           <div>
             <h3>Professional Experience</h3>
           </div>
@@ -302,21 +339,36 @@ export const Onboarding = () => {
               placeholder="Add your core teck Stack"
             />
           </div>
-          <div className="input-box">
-            <label>Skills Used:</label>
-            <div className="add-main">
-              <input
-                value={useSkill}
-                onChange={(e) => setuseSkill(e.target.value)}
-                type="text"
-                className="add-input"
-                placeholder="Add your used skills"
-              />
-              <button onClick={handleAddUse} className="add-btn">
-                ADD
+        
+            <div>Add your used Skills</div>
+          <div className="skills-main">
+            {skillsData?.map((el, index) => (
+              <button
+                key={index}
+                value={el.name}
+                onClick={(e) => handleAddusedSkills(index,el)}
+              >
+                {el.name}
               </button>
-            </div>
+            ))}
+            
           </div>
+
+          <h2>your added used skills sow below</h2>
+          <div className="skills-main">
+            {sowProfessionalSkills?.map((el, index) => (
+              <button
+                key={index}
+                value={el.name}
+                onClick={(e) => deleteProfesionalSkills(index)}
+              >
+                {el.name}
+              </button>
+            ))}
+            
+          </div>
+
+         
 
           <div className="input-box">
             <label>Time Period in year:</label>
@@ -474,5 +526,8 @@ const DIV = styled.div`
     padding: 0.5rem;
     cursor: pointer;
     margin-left: 1rem;
+  }
+  button{
+    cursor: pointer;
   }
 `;

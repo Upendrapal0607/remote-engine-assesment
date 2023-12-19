@@ -29,12 +29,13 @@ export const GetAllDeveloper = () => async (dispatch) => {
 // add new developer action 
 
 export const AddDeveloper = (payload) => async (dispatch) => {
+  console.log({payload});
   try {
     dispatch({ type: DEVELOPER_REQUEST });
     return await axios
       .post(`${developer_api}/add`, payload)
       .then((res) => {
-        console.log({ res });
+        console.log({ resData:res });
         dispatch({ type: DEVELOPER_POST_SUCCESS, payload: res.data });
         return res.data;
       })
