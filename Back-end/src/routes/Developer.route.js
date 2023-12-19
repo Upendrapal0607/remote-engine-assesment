@@ -29,7 +29,6 @@ DeveloperRoute.post("/add", async (req, res) => {
         message: `user whose email ${resUser.email} is alraiday resistered`,
       });
     } else {
-      console.log("hello");
       const developerData = new DeveloperModel(resUser);
       await developerData.save();
       res.status(200).send({
@@ -37,7 +36,7 @@ DeveloperRoute.post("/add", async (req, res) => {
       });
     }
   } catch (error) {
-    console.log("error");
+    console.log({error});
     res.status(200).json({ message: "error" });
   }
 });

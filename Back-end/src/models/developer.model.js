@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// skills schema 
+// skills schema
 const SkillsSchema = mongoose.Schema(
   {
     name: String,
@@ -8,10 +8,12 @@ const SkillsSchema = mongoose.Schema(
   { versionKey: false }
 );
 
-// skills model 
+// skills model
 const SkillsModel = mongoose.model("skills", SkillsSchema);
 
-// developer(onboadring) schema with all required field
+
+
+// developer (Onboarding) schema
 
 const DeveloperSchema = mongoose.Schema(
   {
@@ -30,35 +32,38 @@ const DeveloperSchema = mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
+      unique: true, 
     },
-    skills: [
-      {
-        type: [mongoose.Schema.Types.ObjectId],
-      },
-    ],
+    skills: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "skills",
+      require:true
+    }],
     professional_experience: [
       {
-        company_name: { type: String, required: true },
+        company_name: { type: String },
         tech_stack: String,
-        skills_used: [mongoose.Schema.Types.ObjectId],
-        time_period: { type: Number, default: 0, required: true },
+        skills_used: [{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "skills",
+        }],
+        time_period: { type: Number, default: 0 },
       },
     ],
     educational_experience: [
       {
-        degree_name: { type: String, required: true },
-        school_name: { type: String, required: true },
-        time_period: { type: Number, default: 0, required: true },
+        degree_name: { type: String },
+        school_name: { type: String ,require:true},
+        time_period: { type: Number, default: 0,require:true },
       },
     ],
   },
   { versionKey: false }
 );
 
-// deeloper (Onboarding) model 
+// developer (Onboarding) model
 
-const DeveloperModel = mongoose.model("/DeveloperData", DeveloperSchema);
+const DeveloperModel = mongoose.model("DeveloperData", DeveloperSchema);
 module.exports = {
   SkillsModel,
   DeveloperModel,
