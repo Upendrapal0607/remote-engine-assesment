@@ -165,24 +165,23 @@ export const Onboarding = () => {
       phone_number: basicDetails.phone_number,
       skills: basicDetails.skills,
     };
-console.log({postDeveloperData});
-  
-       dispatch(AddDeveloper(postDeveloperData)).then((res) => {
-        if (
-          res.message ==
-          "your details has been accepted we will get back to you soon"
-        ) {
-          alert(res.message);
-          setDeveloperData(IntireDeveloperData);
-          navigate("/");
-        } else if (
-          res.message ==
-          `user whose email ${postDeveloperData.email} is alraiday resistered`
-        ) {
-          alert(res.message);
-        }
-      });
-    
+    console.log({ postDeveloperData });
+
+    dispatch(AddDeveloper(postDeveloperData)).then((res) => {
+      if (
+        res.message ==
+        "your details has been accepted we will get back to you soon"
+      ) {
+        alert(res.message);
+        setDeveloperData(IntireDeveloperData);
+        navigate("/");
+      } else if (
+        res.message ==
+        `user whose email ${postDeveloperData.email} is alraiday resistered`
+      ) {
+        alert(res.message);
+      }
+    });
   };
 
   const handleSowSkills = (index) => {
@@ -211,9 +210,7 @@ console.log({postDeveloperData});
         <h1>This is developer on board</h1>
       </div>
       <div className="login-container">
-        <div
-          className="login-form"
-        >
+        <div className="login-form">
           <div className="input-box">
             <label>First Name:</label>
             <input
@@ -442,9 +439,8 @@ console.log({postDeveloperData});
             Add new Professional Experience
           </button>
 
-          <button onClick={
-            handleLogin
-          }
+          <button
+            onClick={handleLogin}
             style={{ margin: "1rem" }}
             className="submit-btn"
           >
